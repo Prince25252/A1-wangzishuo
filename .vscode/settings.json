@@ -1,0 +1,15 @@
+{
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "C:/Users/Lenovo/dev/jdk17/jdk-17.0.21.0.2+1",
+            "default": true
+        }
+    ],
+    "java.project.sourcePaths": [
+        "src"
+    ],
+    "java.project.outputPath": "bin",
+    "files.encoding": "utf8",
+    "editor.formatOnSave": false
+}

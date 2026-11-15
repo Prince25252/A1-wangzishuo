@@ -1,0 +1,24 @@
+# Compiled output
+bin/
+out/
+build/
+
+# Java class files
+*.class
+
+# IDE and build tool state
+.classpath
+.project
+.settings/
+target/
+.gradle/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Local tool configuration that must not be shared
+.wakatime.cfg
+wakatime.cfg
