@@ -1,0 +1,152 @@
+﻿
+==============================================================================
+PART 1 & 2 & 3 - STAFF MODEL AND POLYMORPHIC PRINTING
+==============================================================================
+All staff are held in one List<MedicalProfessional>.
+Clinic employs 8 professionals across 5 concrete roles.
+
+  1. General Practitioner   | ID: 1001  | Name: Dr Alice Chan        | Works: MON, TUE, WED, THU, FRI | Room: Room 1, Daily patient limit: 24
+  2. General Practitioner   | ID: 1002  | Name: Dr Ben Okafor        | Works: MON, TUE, WED, THU, FRI, SAT | Room: Room 2, Daily patient limit: 20
+  3. Specialist Doctor      | ID: 2001  | Name: Dr Priya Raman       | Works: MON, TUE, WED, THU, FRI | Specialty: Cardiology, Standard fee: $180.00
+  4. Specialist Doctor      | ID: 2002  | Name: Dr Luis Moreno       | Works: MON, TUE, WED, THU, FRI | Specialty: Dermatology, Standard fee: $150.00
+  5. Nurse                  | ID: 3001  | Name: Nurse Grace Tan      | Works: MON, TUE, WED, THU, FRI | Ward: Ward A, Experience: 11 year(s), Duty level: Senior (unsupervised)
+  6. Nurse                  | ID: 3002  | Name: Nurse Sam Whitfield  | Works: MON, TUE, WED, THU, FRI, SAT | Ward: Ward B, Experience: 2 year(s), Duty level: Graduate (supervised)
+  7. Dietitian              | ID: 4001  | Name: Ms Hazel Brooks      | Works: MON, TUE, WED, THU, FRI | Focus area: Diabetes management, Consultation: 45 minutes
+  8. Physiotherapist        | ID: 5001  | Name: Mr Theo Nguyen       | Works: MON, TUE, WED, THU, FRI | Approach: Sports rehabilitation, Treatment rooms: 3
+
+Note: the loop above never checks the concrete type.
+Each object supplied its own toString() through the abstract class.
+
+Encapsulation guard - the working-day set cannot be changed from outside:
+  Attempt to modify working days was blocked, as designed.
+
+Encapsulation guard - an invalid staff ID is rejected at construction:
+  Rejected: Staff ID must contain digits only, but was: ABC
+
+Working-day check used by the roster:
+  Dr Ben Okafor works on Saturday: true
+  Dr Alice Chan works on Saturday: false
+
+==============================================================================
+PART 2 - ROLE-SPECIFIC DATA AND BEHAVIOUR
+==============================================================================
+GP Dr Alice Chan is in Room 1. With 23 patients already booked, can still accept another? true
+Specialist Dr Priya Raman (Cardiology): standard fee $180.00, review fee $108.00
+Nurse Nurse Grace Tan on Ward A holds duty level "Senior (unsupervised)" and can cover Ward A: true
+Dietitian Ms Hazel Brooks (Diabetes management, 45-minute consults) recommends 4 follow-up review(s) for an assessment score of 8.
+Physiotherapist Mr Theo Nguyen (Sports rehabilitation) estimates 6 sessions for severity 3.
+
+Each call above reached a method that only that subclass defines;
+the shared base class deliberately does not expose them.
+
+==============================================================================
+PART 4 & 5 - APPOINTMENT MANAGER CONFIGURATION
+==============================================================================
+Appointments are same-day only. Today is 2026-11-16.
+Timetable: 08:00-16:00, 30-minute slots, 16 bookable slot(s):
+08:00  08:30  09:00  09:30  10:00  10:30  11:00  11:30  12:00  12:30  13:00  13:30  14:00  14:30  15:00  15:30
+
+==============================================================================
+PART 6.1 - SUCCESSFUL BOOKINGS
+==============================================================================
+Booked: Mei Lin with Dr Alice Chan at 09:00 on 2026-11-16.
+Booked: Jordan Pike with Dr Alice Chan at 09:30 on 2026-11-16.
+Booked: Ana Duarte with Dr Ben Okafor at 09:00 on 2026-11-16.
+Booked: Rob Ellery with Dr Priya Raman at 10:00 on 2026-11-16.
+Booked: Mei Lin with Nurse Grace Tan at 11:00 on 2026-11-16.
+Booked: Jordan Pike with Ms Hazel Brooks at 13:30 on 2026-11-16.
+
+Six bookings were accepted. The manager now holds 6 appointments.
+Note that Ana at 09:00 was accepted even though Mei is also at 09:00,
+because the clash rule is per professional, not per clinic.
+
+==============================================================================
+PART 6.2 - ALL APPOINTMENTS, SORTED BY TIME
+==============================================================================
+
+--- ALL APPOINTMENTS (CHRONOLOGICAL) (6) ---
+     1. 2026-11-16 09:00-09:30 | Patient: Mei Lin (0412345678)     | General Practitioner | Dr Alice Chan (ID 1001)
+     2. 2026-11-16 09:00-09:30 | Patient: Ana Duarte (0434567890)  | General Practitioner | Dr Ben Okafor (ID 1002)
+     3. 2026-11-16 09:30-10:00 | Patient: Jordan Pike (0423456789) | General Practitioner | Dr Alice Chan (ID 1001)
+     4. 2026-11-16 10:00-10:30 | Patient: Rob Ellery (0445678901)  | Specialist Doctor | Dr Priya Raman (ID 2001)
+     5. 2026-11-16 11:00-11:30 | Patient: Mei Lin (0412345678)     | Nurse | Nurse Grace Tan (ID 3001)
+     6. 2026-11-16 13:30-14:00 | Patient: Jordan Pike (0423456789) | Dietitian | Ms Hazel Brooks (ID 4001)
+
+==============================================================================
+PART 5 - FILTERING BY PROFESSIONAL AND BY PATIENT
+==============================================================================
+
+--- FILTER: STAFF ID 1001 (Dr Alice Chan) (2) ---
+     1. 2026-11-16 09:00-09:30 | Patient: Mei Lin (0412345678)     | General Practitioner | Dr Alice Chan (ID 1001)
+     2. 2026-11-16 09:30-10:00 | Patient: Jordan Pike (0423456789) | General Practitioner | Dr Alice Chan (ID 1001)
+
+--- FILTER: PATIENT 0412345678 (Mei Lin) (2) ---
+     1. 2026-11-16 09:00-09:30 | Patient: Mei Lin (0412345678)     | General Practitioner | Dr Alice Chan (ID 1001)
+     2. 2026-11-16 11:00-11:30 | Patient: Mei Lin (0412345678)     | Nurse | Nurse Grace Tan (ID 3001)
+
+==============================================================================
+PART 6.3 - CANCELLATION AND UPDATED STATE
+==============================================================================
+Cancelled: booking with staff ID 1001 at 09:30 on 2026-11-16.
+
+--- AFTER CANCELLING GP 09:30 BOOKING (5) ---
+     1. 2026-11-16 09:00-09:30 | Patient: Mei Lin (0412345678)     | General Practitioner | Dr Alice Chan (ID 1001)
+     2. 2026-11-16 09:00-09:30 | Patient: Ana Duarte (0434567890)  | General Practitioner | Dr Ben Okafor (ID 1002)
+     3. 2026-11-16 10:00-10:30 | Patient: Rob Ellery (0445678901)  | Specialist Doctor | Dr Priya Raman (ID 2001)
+     4. 2026-11-16 11:00-11:30 | Patient: Mei Lin (0412345678)     | Nurse | Nurse Grace Tan (ID 3001)
+     5. 2026-11-16 13:30-14:00 | Patient: Jordan Pike (0423456789) | Dietitian | Ms Hazel Brooks (ID 4001)
+Cancelled 1 booking(s) for phone number 0423456789.
+
+--- AFTER CANCELLING PATIENT 0423456789 (4) ---
+     1. 2026-11-16 09:00-09:30 | Patient: Mei Lin (0412345678)     | General Practitioner | Dr Alice Chan (ID 1001)
+     2. 2026-11-16 09:00-09:30 | Patient: Ana Duarte (0434567890)  | General Practitioner | Dr Ben Okafor (ID 1002)
+     3. 2026-11-16 10:00-10:30 | Patient: Rob Ellery (0445678901)  | Specialist Doctor | Dr Priya Raman (ID 2001)
+     4. 2026-11-16 11:00-11:30 | Patient: Mei Lin (0412345678)     | Nurse | Nurse Grace Tan (ID 3001)
+
+==============================================================================
+PART 6.4 - REJECTED OPERATIONS AND WARNINGS
+==============================================================================
+The following calls are expected to fail.
+
+1) Double booking: same professional, same time.
+WARNING: Appointment rejected: Dr Alice Chan already has a booking at 09:00 on 2026-11-16. Double booking is not allowed.
+
+2) Cancelling a booking that does not exist.
+WARNING: Cancellation failed: no booking for staff ID 2001 at 15:00 on 2026-11-16.
+
+3) Booking outside the configured timetable.
+WARNING: Appointment rejected: 07:15 is not a bookable slot. Slots run from 08:00 to 16:00 every 30 minutes.
+
+4) Booking a time that is not aligned to a slot.
+WARNING: Appointment rejected: 09:45 is not a bookable slot. Slots run from 08:00 to 16:00 every 30 minutes.
+
+5) Cancelling by a phone number with no bookings.
+WARNING: Cancellation failed: no bookings found for phone number 0499999999.
+
+6) Searching for a professional that does not exist.
+
+--- FILTER: STAFF ID 9999 (0) ---
+    (none)
+
+7) Booking for a different day (the clinic is same-day only).
+WARNING: Appointment rejected: the clinic books same-day appointments only. Requested 2026-11-17, today is 2026-11-16.
+
+==============================================================================
+FINAL STATE AFTER THE DEMONSTRATION
+==============================================================================
+
+--- REMAINING APPOINTMENTS (4) ---
+     1. 2026-11-16 09:00-09:30 | Patient: Mei Lin (0412345678)     | General Practitioner | Dr Alice Chan (ID 1001)
+     2. 2026-11-16 09:00-09:30 | Patient: Ana Duarte (0434567890)  | General Practitioner | Dr Ben Okafor (ID 1002)
+     3. 2026-11-16 10:00-10:30 | Patient: Rob Ellery (0445678901)  | Specialist Doctor | Dr Priya Raman (ID 2001)
+     4. 2026-11-16 11:00-11:30 | Patient: Mei Lin (0412345678)     | Nurse | Nurse Grace Tan (ID 3001)
+
+Total remaining bookings: 4
+
+==============================================================================
+PART 5 - TIMETABLE IS CONFIGURATION, NOT HARD-CODED LOGIC
+==============================================================================
+Reconfiguring the clinic to 09:00-17:00 in 20-minute slots.
+Timetable: 09:00-17:00, 20-minute slots, 24 bookable slot(s):
+09:00  09:20  09:40  10:00  10:20  10:40  11:00  11:20  11:40  12:00  12:20  12:40  13:00  13:20  13:40  14:00  14:20  14:40  15:00  15:20  15:40  16:00  16:20  16:40
+Existing bookings were preserved: 4 still held. The new hours govern future bookings only.
