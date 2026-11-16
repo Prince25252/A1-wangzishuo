@@ -29,11 +29,61 @@ MedicalProfessional        (abstract base: staffId, name, workingDays)
 Patient                    (name, validated ten-digit phone number)
 Appointment                (patient, professional, date, start time) implements Comparable
 AppointmentManager         (ArrayList<Appointment>, configurable timetable)
-AssignmentOne              (main, demonstration only)
+Clinic                     (staff roster, patient register, free-slot and statistics queries)
+InputReader                (defensive console input, never crashes on bad typing)
+ClinicMenu                 (interactive console, presentation only)
+AssignmentOne              (main: scripted demonstration, or the console via "menu")
 ```
 
 The project uses the default package, matching the brief's instruction to
 create `AssignmentOne` directly under `src`.
+
+## Extensions beyond the brief
+
+The brief only asks for the object model to be simulated from `main`, so the
+console is an extra rather than a requirement. It is included because the model
+is easier to demonstrate when a marker can drive it without recompiling.
+
+Run the console with:
+
+```
+java -cp bin AssignmentOne menu
+```
+
+The console offers twelve operations:
+
+1. list the roster with every professional's own detail;
+2. search the roster by a fragment of a name or a role title;
+3. show which slots one professional still has free today, and how many are
+   already taken;
+4. book an appointment through guided prompts, choosing from the free slots that
+   are actually offered, and registering a new patient inline when the phone
+   number is unknown;
+5. list every appointment in chronological order;
+6. filter by professional identifier;
+7. filter by patient phone number;
+8. cancel one booking by professional and start time;
+9. cancel every booking belonging to a patient;
+10. register a patient;
+11. print the day's operational summary: utilisation, busiest slot, bookings per
+    role, and load per professional;
+12. show the configured timetable and who is rostered today.
+
+Design notes:
+
+- `ClinicMenu` holds no business rules. Booking, clash detection, filtering,
+  sorting and cancellation all remain in `AppointmentManager`; the console only
+  validates input and formats output.
+- `InputReader` re-prompts on a mistyped value and reports end-of-input through
+  an empty `Optional`, so piping input into the program cannot hang it in a
+  loop.
+- `Clinic` owns the roster, the patient register and the queries the console and
+  the statistics screen need, keeping `AssignmentOne` free of duplicated staff
+  construction.
+- Booking offers only genuinely free slots, so a double booking cannot normally
+  be attempted from the console. The clash rule is still enforced in the manager
+  and is demonstrated in the scripted run.
+
 
 ## How the four OOP pillars appear
 
@@ -83,7 +133,8 @@ From the project root:
 
 ```
 javac -d bin src/*.java
-java -cp bin AssignmentOne
+java -cp bin AssignmentOne          # scripted demonstration
+java -cp bin AssignmentOne menu     # interactive console
 ```
 
 In VS Code: open the project folder, install the *Extension Pack for Java*,
