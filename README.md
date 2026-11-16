@@ -3,9 +3,9 @@
 A Java object model for a small health clinic that books patients into
 appointment slots with medical professionals. The brief requires the model
 itself, so everything is driven from `AssignmentOne.main`: no graphical
-interface, no login and no persistent storage. The program first runs the
-scripted demonstration Parts 3 and 6 ask for, then hands control to an
-interactive console so the same model can be driven by a numbered menu.
+interface, no login and no persistent storage. Running the program opens an
+interactive console straight away; menu option 13 replays the scripted
+demonstration that Parts 3 and 6 ask for.
 
 ## Assessment mapping
 
@@ -34,7 +34,7 @@ AppointmentManager         (ArrayList<Appointment>, configurable timetable)
 Clinic                     (staff roster, patient register, free-slot and statistics queries)
 InputReader                (defensive console input, never crashes on bad typing)
 ClinicMenu                 (interactive console, presentation only)
-AssignmentOne              (main: demonstration first, then the interactive console)
+AssignmentOne              (main: opens the console; the script lives behind "demo")
 ```
 
 The project uses the default package, matching the brief's instruction to
@@ -49,12 +49,11 @@ is easier to demonstrate when a marker can drive it without recompiling.
 Run the program:
 
 ```
-java -cp bin AssignmentOne          # demonstration, then the interactive console
-java -cp bin AssignmentOne menu     # console only
-java -cp bin AssignmentOne demo     # demonstration only
+java -cp bin AssignmentOne          # opens the interactive console
+java -cp bin AssignmentOne demo     # runs the scripted demonstration only
 ```
 
-The console offers twelve operations:
+The console offers thirteen operations:
 
 1. list the roster with every professional's own detail;
 2. search the roster by a fragment of a name or a role title;
@@ -71,7 +70,9 @@ The console offers twelve operations:
 10. register a patient;
 11. print the day's operational summary: utilisation, busiest slot, bookings per
     role, and load per professional;
-12. show the configured timetable and who is rostered today.
+12. show the configured timetable and who is rostered today;
+13. replay the Parts 1-6 demonstration, which is the same output the `demo`
+    argument produces from the command line.
 
 Design notes:
 
@@ -137,9 +138,8 @@ From the project root:
 
 ```
 javac -encoding UTF-8 -d bin src/*.java
-java -cp bin AssignmentOne          # demonstration, then the interactive console
-java -cp bin AssignmentOne menu     # interactive console only
-java -cp bin AssignmentOne demo     # demonstration only
+java -cp bin AssignmentOne          # interactive console
+java -cp bin AssignmentOne demo     # scripted demonstration only
 ```
 
 In VS Code: open the project folder, install the *Extension Pack for Java*,

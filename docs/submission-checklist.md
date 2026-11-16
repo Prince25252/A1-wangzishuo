@@ -52,11 +52,8 @@ so check everything before you submit.
 # compile
 javac -encoding UTF-8 -d bin src/*.java
 
-# run: demonstration first, then the interactive menu
+# run: opens the interactive console (menu option 13 shows the demonstration)
 java -cp bin AssignmentOne
-
-# run: the menu on its own
-java -cp bin AssignmentOne menu
 
 # run: the demonstration on its own (this is what docs/demo-output.txt records)
 java -cp bin AssignmentOne demo

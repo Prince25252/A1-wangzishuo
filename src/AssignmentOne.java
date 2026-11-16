@@ -8,22 +8,23 @@ import java.util.List;
 /**
  * Entry point of Assessment One.
  *
- * <p>With no arguments the class exercises the inheritance and polymorphism
- * design from Parts 1 to 3, runs an end-to-end demonstration of the appointment
- * system from Parts 4 to 6 (including both successful operations and rejected
- * ones, so every validation rule and warning path can be observed), and then
- * hands control to the interactive console so the program is driven by a menu
- * instead of ending after a fixed script.</p>
+ * <p>With no arguments the class opens the interactive console straight away, so
+ * the program starts on a numbered menu rather than on a wall of text.</p>
  *
- * <p>The argument {@code menu} skips the script and opens the interactive
- * console straight away; the argument {@code demo} runs the script only. Both
- * are extensions beyond the brief, which asks only for the object model to be
- * simulated from {@code main}.</p>
+ * <p>Menu option 13 runs the scripted demonstration: the inheritance and
+ * polymorphism design from Parts 1 to 3 plus the end-to-end appointment
+ * demonstration from Parts 4 to 6, including the rejected operations, so every
+ * validation rule and warning path can still be observed.</p>
+ *
+ * <p>The argument {@code demo} runs that script from the command line without
+ * opening the console; the argument {@code menu} is accepted and does the same
+ * as no argument. The console is an extension beyond the brief, which asks only
+ * for the object model to be simulated from {@code main}.</p>
  *
  * <p>No graphical interface, login, or file storage is used.</p>
  *
  * @author Student
- * @version 1.2
+ * @version 1.3
  */
 public class AssignmentOne {
 
@@ -31,20 +32,28 @@ public class AssignmentOne {
     private static final int RULE_WIDTH = 78;
 
     /**
-     * Runs the scripted demonstration and then the interactive console.
+     * Opens the interactive console, or runs the script when asked to.
      *
-     * @param args {@code menu} to open the console only, {@code demo} to run
-     *             the script only, anything else for both in sequence
+     * @param args {@code demo} runs the script only; {@code menu} or nothing
+     *             opens the console
      */
     public static void main(String[] args) {
-        boolean menuOnly = args.length > 0 && args[0].equalsIgnoreCase("menu");
         boolean scriptOnly = args.length > 0 && args[0].equalsIgnoreCase("demo");
 
-        if (menuOnly) {
-            new ClinicMenu(new Clinic()).run();
+        if (scriptOnly) {
+            runDemonstration();
             return;
         }
 
+        new ClinicMenu(new Clinic()).run();
+    }
+
+    /**
+     * Runs the whole scripted demonstration. The console calls this for menu
+     * option 13, and {@code main} calls it when given the {@code demo}
+     * argument, so both routes print exactly the same evidence.
+     */
+    public static void runDemonstration() {
         Clinic clinic = new Clinic();
         List<MedicalProfessional> staff = clinic.getStaff();
 
@@ -54,13 +63,6 @@ public class AssignmentOne {
 
         System.out.println();
         System.out.println("This run covered the Parts 3 and 6 demonstration.");
-
-        if (scriptOnly) {
-            return;
-        }
-
-        System.out.println("Starting the interactive console. Type 0 to leave.");
-        new ClinicMenu(new Clinic()).run();
     }
 
     /**

@@ -51,16 +51,14 @@ public class ClinicMenu {
      * Runs the console until the user chooses to exit or input ends.
      */
     public void run() {
+        printWelcomeBanner();
         seedSampleData();
-        System.out.println();
-        System.out.println("Greenfield Family Clinic - appointment console");
-        System.out.println("Sample patients and bookings were loaded so every screen has content.");
         System.out.println("Appointments are same-day only; the clinic books today, "
                 + LocalDate.now() + ".");
 
         while (true) {
             printMainMenu();
-            OptionalInt choice = input.readIntInRange("Select an option: ", 0, 12);
+            OptionalInt choice = input.readIntInRange("Select an option: ", 0, 13);
             if (choice.isEmpty()) {
                 System.out.println();
                 System.out.println("Input closed. Goodbye.");
@@ -86,6 +84,7 @@ public class ClinicMenu {
                 case 10 -> registerPatient();
                 case 11 -> showStatistics();
                 case 12 -> showTimetable();
+                case 13 -> runAssessmentDemonstration();
                 default -> System.out.println("Unknown option.");
             }
             if (!input.pause()) {
@@ -94,6 +93,21 @@ public class ClinicMenu {
                 return;
             }
         }
+    }
+
+    /**
+     * Prints the title screen. The console is the first thing the program shows,
+     * so the clinic name and the menu that follows are not buried under the
+     * sample-data messages.
+     */
+    private void printWelcomeBanner() {
+        System.out.println();
+        System.out.println(repeat('=', WIDTH));
+        System.out.println(" GREENFIELD FAMILY CLINIC - APPOINTMENT CONSOLE");
+        System.out.println(" " + LocalDate.now() + "  " + LocalDate.now().getDayOfWeek()
+                + "   (extension beyond the brief)");
+        System.out.println(repeat('=', WIDTH));
+        System.out.println("Loading today's sample patients and bookings.");
     }
 
     /**
@@ -141,6 +155,7 @@ public class ClinicMenu {
         System.out.println(" 10) Register a new patient");
         System.out.println(" 11) Today's statistics");
         System.out.println(" 12) Show clinic timetable");
+        System.out.println(" 13) Run the Parts 1-6 assessment demonstration");
         System.out.println("  0) Exit");
     }
 
@@ -435,6 +450,15 @@ public class ClinicMenu {
                 System.out.println("    " + professional.getRole() + " - " + professional.getName());
             }
         }
+    }
+
+    /**
+     * Screen 13: replays the scripted demonstration the brief asks for in Parts
+     * 3 and 6, so the evidence is reachable from the menu instead of only from
+     * the command line.
+     */
+    private void runAssessmentDemonstration() {
+        AssignmentOne.runDemonstration();
     }
 
     /**
