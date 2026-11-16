@@ -3,24 +3,25 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Entry point of Assessment One.
  *
- * <p>The class builds the clinic's staff, exercises the inheritance and
- * polymorphism design from Parts 1 to 3, then runs an end-to-end demonstration
- * of the appointment system from Parts 4 to 6. The demonstration deliberately
- * includes both successful operations and rejected ones, so every validation
- * rule and every warning path can be observed in the console output.</p>
+ * <p>With no arguments the class exercises the inheritance and polymorphism
+ * design from Parts 1 to 3 and then runs an end-to-end demonstration of the
+ * appointment system from Parts 4 to 6, including both successful operations
+ * and rejected ones, so every validation rule and warning path can be observed
+ * in the console output.</p>
  *
- * <p>No graphical interface, login, or file storage is used: the brief only
- * asks for the underlying object model, simulated from {@code main}.</p>
+ * <p>With the single argument {@code menu} it starts the interactive console
+ * instead. That console is an extension beyond the brief: the brief asks only
+ * for the object model to be simulated from {@code main}.</p>
+ *
+ * <p>No graphical interface, login, or file storage is used.</p>
  *
  * @author Student
- * @version 1.0
+ * @version 1.1
  */
 public class AssignmentOne {
 
@@ -28,50 +29,27 @@ public class AssignmentOne {
     private static final int RULE_WIDTH = 78;
 
     /**
-     * Runs the full demonstration.
+     * Runs either the scripted demonstration or the interactive console.
      *
-     * @param args command-line arguments, not used
+     * @param args pass {@code menu} to start the interactive console
      */
     public static void main(String[] args) {
-        List<MedicalProfessional> staff = buildClinicStaff();
+        if (args.length > 0 && args[0].equalsIgnoreCase("menu")) {
+            new ClinicMenu(new Clinic()).run();
+            return;
+        }
+
+        Clinic clinic = new Clinic();
+        List<MedicalProfessional> staff = clinic.getStaff();
 
         demonstrateStaffModel(staff);
         demonstrateRoleSpecificBehaviour(staff);
         demonstrateAppointmentSystem(staff);
-    }
 
-    /**
-     * Creates the clinic's staff. Several professionals share each concrete
-     * type, and two different working patterns are used to show that working
-     * days are genuine per-object data rather than a constant.
-     *
-     * @return every professional employed by the clinic
-     */
-    private static List<MedicalProfessional> buildClinicStaff() {
-        Set<DayOfWeek> weekdays = EnumSet.range(DayOfWeek.MONDAY, DayOfWeek.FRIDAY);
-        Set<DayOfWeek> extended = EnumSet.range(DayOfWeek.MONDAY, DayOfWeek.SATURDAY);
-
-        List<MedicalProfessional> staff = new ArrayList<>();
-
-        // Two general practitioners: the mandatory subclass.
-        staff.add(new GeneralPractitioner("1001", "Dr Alice Chan", weekdays, "Room 1", 24));
-        staff.add(new GeneralPractitioner("1002", "Dr Ben Okafor", extended, "Room 2", 20));
-
-        // Two specialist doctors, each with a different specialty and fee.
-        staff.add(new SpecialistDoctor("2001", "Dr Priya Raman", weekdays, "Cardiology", 180.00));
-        staff.add(new SpecialistDoctor("2002", "Dr Luis Moreno", weekdays, "Dermatology", 150.00));
-
-        // Two nurses on different wards with different experience.
-        staff.add(new Nurse("3001", "Nurse Grace Tan", weekdays, "Ward A", 11));
-        staff.add(new Nurse("3002", "Nurse Sam Whitfield", extended, "Ward B", 2));
-
-        // One dietitian and one physiotherapist.
-        staff.add(new Dietitian("4001", "Ms Hazel Brooks", weekdays,
-                "Diabetes management", 45));
-        staff.add(new Physiotherapist("5001", "Mr Theo Nguyen", weekdays,
-                "Sports rehabilitation", 3));
-
-        return staff;
+        System.out.println();
+        System.out.println("This run was the scripted demonstration required by Parts 3 and 6.");
+        System.out.println("For the interactive console, run:");
+        System.out.println("    java -cp bin AssignmentOne menu");
     }
 
     /**
