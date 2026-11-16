@@ -1,9 +1,11 @@
 # PROG2004 Assessment One - Health Service Appointment System
 
 A Java object model for a small health clinic that books patients into
-appointment slots with medical professionals. The assessment brief requires the
-model only: there is no graphical interface, no login, no menu and no
-persistent storage. Everything is simulated from `AssignmentOne.main`.
+appointment slots with medical professionals. The brief requires the model
+itself, so everything is driven from `AssignmentOne.main`: no graphical
+interface, no login and no persistent storage. The program first runs the
+scripted demonstration Parts 3 and 6 ask for, then hands control to an
+interactive console so the same model can be driven by a numbered menu.
 
 ## Assessment mapping
 
@@ -32,7 +34,7 @@ AppointmentManager         (ArrayList<Appointment>, configurable timetable)
 Clinic                     (staff roster, patient register, free-slot and statistics queries)
 InputReader                (defensive console input, never crashes on bad typing)
 ClinicMenu                 (interactive console, presentation only)
-AssignmentOne              (main: scripted demonstration, or the console via "menu")
+AssignmentOne              (main: demonstration first, then the interactive console)
 ```
 
 The project uses the default package, matching the brief's instruction to
@@ -44,10 +46,12 @@ The brief only asks for the object model to be simulated from `main`, so the
 console is an extra rather than a requirement. It is included because the model
 is easier to demonstrate when a marker can drive it without recompiling.
 
-Run the console with:
+Run the program:
 
 ```
-java -cp bin AssignmentOne menu
+java -cp bin AssignmentOne          # demonstration, then the interactive console
+java -cp bin AssignmentOne menu     # console only
+java -cp bin AssignmentOne demo     # demonstration only
 ```
 
 The console offers twelve operations:
@@ -132,9 +136,10 @@ Requires JDK 17 or newer.
 From the project root:
 
 ```
-javac -d bin src/*.java
-java -cp bin AssignmentOne          # scripted demonstration
-java -cp bin AssignmentOne menu     # interactive console
+javac -encoding UTF-8 -d bin src/*.java
+java -cp bin AssignmentOne          # demonstration, then the interactive console
+java -cp bin AssignmentOne menu     # interactive console only
+java -cp bin AssignmentOne demo     # demonstration only
 ```
 
 In VS Code: open the project folder, install the *Extension Pack for Java*,

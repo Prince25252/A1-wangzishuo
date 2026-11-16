@@ -9,19 +9,21 @@ import java.util.List;
  * Entry point of Assessment One.
  *
  * <p>With no arguments the class exercises the inheritance and polymorphism
- * design from Parts 1 to 3 and then runs an end-to-end demonstration of the
- * appointment system from Parts 4 to 6, including both successful operations
- * and rejected ones, so every validation rule and warning path can be observed
- * in the console output.</p>
+ * design from Parts 1 to 3, runs an end-to-end demonstration of the appointment
+ * system from Parts 4 to 6 (including both successful operations and rejected
+ * ones, so every validation rule and warning path can be observed), and then
+ * hands control to the interactive console so the program is driven by a menu
+ * instead of ending after a fixed script.</p>
  *
- * <p>With the single argument {@code menu} it starts the interactive console
- * instead. That console is an extension beyond the brief: the brief asks only
- * for the object model to be simulated from {@code main}.</p>
+ * <p>The argument {@code menu} skips the script and opens the interactive
+ * console straight away; the argument {@code demo} runs the script only. Both
+ * are extensions beyond the brief, which asks only for the object model to be
+ * simulated from {@code main}.</p>
  *
  * <p>No graphical interface, login, or file storage is used.</p>
  *
  * @author Student
- * @version 1.1
+ * @version 1.2
  */
 public class AssignmentOne {
 
@@ -29,12 +31,16 @@ public class AssignmentOne {
     private static final int RULE_WIDTH = 78;
 
     /**
-     * Runs either the scripted demonstration or the interactive console.
+     * Runs the scripted demonstration and then the interactive console.
      *
-     * @param args pass {@code menu} to start the interactive console
+     * @param args {@code menu} to open the console only, {@code demo} to run
+     *             the script only, anything else for both in sequence
      */
     public static void main(String[] args) {
-        if (args.length > 0 && args[0].equalsIgnoreCase("menu")) {
+        boolean menuOnly = args.length > 0 && args[0].equalsIgnoreCase("menu");
+        boolean scriptOnly = args.length > 0 && args[0].equalsIgnoreCase("demo");
+
+        if (menuOnly) {
             new ClinicMenu(new Clinic()).run();
             return;
         }
@@ -47,9 +53,14 @@ public class AssignmentOne {
         demonstrateAppointmentSystem(staff);
 
         System.out.println();
-        System.out.println("This run was the scripted demonstration required by Parts 3 and 6.");
-        System.out.println("For the interactive console, run:");
-        System.out.println("    java -cp bin AssignmentOne menu");
+        System.out.println("This run covered the Parts 3 and 6 demonstration.");
+
+        if (scriptOnly) {
+            return;
+        }
+
+        System.out.println("Starting the interactive console. Type 0 to leave.");
+        new ClinicMenu(new Clinic()).run();
     }
 
     /**
